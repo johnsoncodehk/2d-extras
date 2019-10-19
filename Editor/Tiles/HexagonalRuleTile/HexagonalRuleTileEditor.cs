@@ -76,6 +76,7 @@ namespace UnityEditor
                 int arrowIndex = flatTop ? s_FlatTopArrows[index] : s_PointedTopArrows[index];
                 Rect r = new Rect(rect.xMin + position.x * w, rect.yMin + position.y * h, w - 1, h - 1);
                 RuleOnGUI(r, arrowIndex, tilingRule.m_Neighbors[index]);
+                RuleTooltipOnGUI(r, tilingRule.m_Neighbors[index]);
                 RuleNeighborUpdate(r, tilingRule, index);
             }
             // Center

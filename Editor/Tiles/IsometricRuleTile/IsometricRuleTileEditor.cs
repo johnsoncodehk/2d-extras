@@ -54,6 +54,7 @@ namespace UnityEditor
                     if (x != 1 || y != 1)
                     {
                         RuleOnGUI(r, s_Arrows[y, x], tilingRule.m_Neighbors[index]);
+                        RuleTooltipOnGUI(r, tilingRule.m_Neighbors[index]);
                         RuleNeighborUpdate(r, tilingRule, index);
 
                         index++;

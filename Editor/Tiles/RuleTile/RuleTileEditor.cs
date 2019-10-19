@@ -206,6 +206,10 @@ namespace UnityEditor
                     GUI.Label(rect, neighbor.ToString(), style);
                     break;
             }
+        }
+
+        public void RuleTooltipOnGUI(Rect rect, int neighbor)
+        {
             var allConsts = tile.m_NeighborType.GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.FlattenHierarchy);
             foreach (var c in allConsts)
             {
@@ -296,6 +300,7 @@ namespace UnityEditor
                     if (x != 1 || y != 1)
                     {
                         RuleOnGUI(r, y * 3 + x, tilingRule.m_Neighbors[index]);
+                        RuleTooltipOnGUI(r, tilingRule.m_Neighbors[index]);
                         RuleNeighborUpdate(r, tilingRule, index);
 
                         index++;
