@@ -389,17 +389,17 @@ namespace UnityEngine
         /// Checks if there is a match given the neighbor matching rule and a Tile.
         /// </summary>
         /// <param name="neighbor">Neighbor matching rule.</param>
-        /// <param name="tile">Tile to match.</param>
+        /// <param name="other">Tile to match.</param>
         /// <returns>True if there is a match, False if not.</returns>
-        public virtual bool RuleMatch(int neighbor, TileBase tile)
+        public virtual bool RuleMatch(int neighbor, TileBase other)
         {
-            if (tile is RuleOverrideTile)
-                tile = (tile as RuleOverrideTile).m_InstanceTile;
+            if (other is RuleOverrideTile)
+                other = (other as RuleOverrideTile).m_InstanceTile;
 
             switch (neighbor)
             {
-                case TilingRule.Neighbor.This: return tile == this;
-                case TilingRule.Neighbor.NotThis: return tile != this;
+                case TilingRule.Neighbor.This: return other == this;
+                case TilingRule.Neighbor.NotThis: return other != this;
             }
             return true;
         }
@@ -416,8 +416,8 @@ namespace UnityEngine
             for (int i = 0; i < neighborCount; ++i)
             {
                 int index = GetRotatedIndex(i, angle);
-                TileBase tile = neighboringTiles[index];
-                if (!RuleMatch(rule.m_Neighbors[i], tile))
+                TileBase other = neighboringTiles[index];
+                if (!RuleMatch(rule.m_Neighbors[i], other))
                 {
                     return false;
                 }
@@ -438,8 +438,8 @@ namespace UnityEngine
             for (int i = 0; i < neighborCount; ++i)
             {
                 int index = GetMirroredIndex(i, mirrorX, mirrorY);
-                TileBase tile = neighboringTiles[index];
-                if (!RuleMatch(rule.m_Neighbors[i], tile))
+                TileBase other = neighboringTiles[index];
+                if (!RuleMatch(rule.m_Neighbors[i], other))
                 {
                     return false;
                 }
