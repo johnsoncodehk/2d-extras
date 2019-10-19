@@ -89,7 +89,7 @@ namespace UnityEditor
 
         private float GetElementHeight(int index)
         {
-            if (tile.m_TilingRules != null && tile.m_TilingRules.Count > 0)
+            if (tile.m_TilingRules.Count > 0)
             {
                 switch (tile.m_TilingRules[index].m_Output)
                 {
@@ -174,7 +174,7 @@ namespace UnityEditor
 
             EditorGUILayout.Space();
 
-            if (m_ReorderableList != null && tile.m_TilingRules != null)
+            if (m_ReorderableList != null)
                 m_ReorderableList.DoLayoutList();
         }
 

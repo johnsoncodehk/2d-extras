@@ -309,7 +309,7 @@ namespace UnityEngine
         /// <param name="tileMap">The Tilemap the tile is present on.</param>
         public override void RefreshTile(Vector3Int location, ITilemap tileMap)
         {
-            if (m_TilingRules != null && m_TilingRules.Count > 0)
+            if (m_TilingRules.Count > 0)
             {
                 for (int y = -1; y <= 1; y++)
                 {
