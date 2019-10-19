@@ -19,7 +19,7 @@ namespace UnityEditor
         };
         private static readonly int[] s_FlatTopArrows = {1, 2, 8, 7, 6, 0};
 
-        internal override void RuleMatrixOnGUI(RuleTile ruleTile, Rect rect, RuleTile.TilingRule tilingRule)
+        public override void RuleMatrixOnGUI(RuleTile ruleTile, Rect rect, RuleTile.TilingRule tilingRule)
         {
             var hexTile = (HexagonalRuleTile) ruleTile;
             bool flatTop = hexTile.m_FlatTop;

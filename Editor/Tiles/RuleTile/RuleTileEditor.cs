@@ -67,10 +67,10 @@ namespace UnityEditor
         private RuleTile tile { get { return (target as RuleTile); } }
         private ReorderableList m_ReorderableList;
 
-        internal const float k_DefaultElementHeight = 48f;
-        internal const float k_PaddingBetweenRules = 26f;
-        internal const float k_SingleLineHeight = 16f;
-        internal const float k_LabelWidth = 80f;
+        public const float k_DefaultElementHeight = 48f;
+        public const float k_PaddingBetweenRules = 26f;
+        public const float k_SingleLineHeight = 16f;
+        public const float k_LabelWidth = 80f;
 
         public void OnEnable()
         {
@@ -187,7 +187,7 @@ namespace UnityEditor
                 EditorGUILayout.PropertyField(serializedObject.FindProperty(field.Name), true);
         }
 
-        internal virtual void RuleOnGUI(Rect rect, int arrowIndex, int neighbor)
+        public virtual void RuleOnGUI(Rect rect, int arrowIndex, int neighbor)
         {
             switch (neighbor)
             {
@@ -217,7 +217,7 @@ namespace UnityEditor
             }
         }
 
-        internal virtual void RuleTransformOnGUI(Rect rect, RuleTile.TilingRule.Transform ruleTransform)
+        public virtual void RuleTransformOnGUI(Rect rect, RuleTile.TilingRule.Transform ruleTransform)
         {
             switch (ruleTransform)
             {
@@ -233,7 +233,7 @@ namespace UnityEditor
             }
         }
 
-        internal void RuleNeighborUpdate(Rect rect, RuleTile.TilingRule tilingRule, int index)
+        public void RuleNeighborUpdate(Rect rect, RuleTile.TilingRule tilingRule, int index)
         {
             if (Event.current.type == EventType.MouseDown && ContainsMousePosition(rect))
             {
@@ -249,7 +249,7 @@ namespace UnityEditor
             }
         }
 
-        internal void RuleTransformUpdate(Rect rect, RuleTile.TilingRule tilingRule)
+        public void RuleTransformUpdate(Rect rect, RuleTile.TilingRule tilingRule)
         {
             if (Event.current.type == EventType.MouseDown && ContainsMousePosition(rect))
             {
@@ -259,7 +259,7 @@ namespace UnityEditor
             }
         }
 
-        internal virtual bool ContainsMousePosition(Rect rect)
+        public virtual bool ContainsMousePosition(Rect rect)
         {
             return rect.Contains(Event.current.mousePosition);
         }
@@ -269,7 +269,7 @@ namespace UnityEditor
             return Event.current.button == 1 ? -1 : 1;
         }
 
-        internal virtual void RuleMatrixOnGUI(RuleTile tile, Rect rect, RuleTile.TilingRule tilingRule)
+        public virtual void RuleMatrixOnGUI(RuleTile tile, Rect rect, RuleTile.TilingRule tilingRule)
         {
             Handles.color = EditorGUIUtility.isProSkin ? new Color(1f, 1f, 1f, 0.2f) : new Color(0f, 0f, 0f, 0.2f);
             int index = 0;
@@ -309,12 +309,12 @@ namespace UnityEditor
             }
         }
 
-        internal static void SpriteOnGUI(Rect rect, RuleTile.TilingRule tilingRule)
+        public static void SpriteOnGUI(Rect rect, RuleTile.TilingRule tilingRule)
         {
             tilingRule.m_Sprites[0] = EditorGUI.ObjectField(new Rect(rect.xMax - rect.height, rect.yMin, rect.height, rect.height), tilingRule.m_Sprites[0], typeof(Sprite), false) as Sprite;
         }
 
-        internal static void RuleInspectorOnGUI(Rect rect, RuleTile.TilingRule tilingRule)
+        public static void RuleInspectorOnGUI(Rect rect, RuleTile.TilingRule tilingRule)
         {
             float y = rect.yMin;
             EditorGUI.BeginChangeCheck();

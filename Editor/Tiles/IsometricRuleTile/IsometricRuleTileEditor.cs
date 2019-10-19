@@ -16,7 +16,7 @@ namespace UnityEditor
             { 7, 8, 5 },
         };
 
-        internal override void RuleMatrixOnGUI(RuleTile ruleTile, Rect rect, RuleTile.TilingRule tilingRule)
+        public override void RuleMatrixOnGUI(RuleTile ruleTile, Rect rect, RuleTile.TilingRule tilingRule)
         {
             Handles.color = EditorGUIUtility.isProSkin ? new Color(1f, 1f, 1f, 0.2f) : new Color(0f, 0f, 0f, 0.2f);
             int index = 0;
@@ -67,7 +67,7 @@ namespace UnityEditor
             }
         }
 
-        internal override bool ContainsMousePosition(Rect rect)
+        public override bool ContainsMousePosition(Rect rect)
         {
             var center = rect.center;
             var halfWidth = rect.width / 2;
