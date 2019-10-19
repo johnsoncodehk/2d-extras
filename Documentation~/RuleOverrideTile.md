@@ -9,7 +9,6 @@ Rule Override Tiles are Tiles which can override a subset of Rules for a given R
 | Property          | Function                                                     |
 | ----------------- | ------------------------------------------------------------ |
 | __Tile__          | The Rule Tile to override.                                   |
-| __Override Self__ | Enable this so that this Tile only accepts instances of itself when matching Rules. |
 | __Advanced__      | Enable Advanced Mode. Enable this if you want to specify which Rules to override. |
 
 ### Usage

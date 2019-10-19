@@ -4,99 +4,145 @@
 
 This helps to create new custom Rule Tile with new matching options, instead of the default options: Don't Care, This and Not This for the default Rule Tile. Using this will create clickable options for each Rule in your custom Rule Tile.
 
-### Features
-
-- Inheritable RuleTile
-- Customizable attributes
-- Can expand or rewrite neighbor rules and GUI display
-- Can be used by RuleOverrideTile
-- Template script (Menu: Assets/Create/Custom Rule Tile Script)
-- Neighbor rules tooltip
-- Backward compatible
-
 ### Usage
 
 From the Assets menu, select Create/Custom Rule Tile Script. This will prompt you to create a new file with a name. After creating the file, you can edit it to add new matching options and the algorithm for testing matches.
 
 ### Examples
 
-- Custom Attributes:
+#### Custom Attributes
 
 ```csharp
-public class MyTile : RuleTile {
+public class MyTile1 : RuleTile {
+
 	public string tileId;
-	public bool isWater;
+	public bool isWalkable;
+
 }
 ```
 
-- Custom Rules:
+#### Custom Rules
 
 ```csharp
-public class MyTile : RuleTile<MyTile.Neighbor> {
+public class MyTile2 : RuleTile<MyTile2.Neighbor> {
+
+	public bool isWalkable;
+
 	public class Neighbor {
-		public const int MyRule1 = 0;
-		public const int MyRule2 = 1;
+		public const int DontCare = 0;
+		public const int Walkable = 1;
 	}
-	public override bool RuleMatch(int neighbor, TileBase tile) {
+
+	public override bool RuleMatch(int neighbor, TileBase other) {
+        if (other is RuleOverrideTile)
+            other = (other as RuleOverrideTile).m_InstanceTile;
+
 		switch (neighbor) {
-			case Neighbor.MyRule1: return false;
-			case Neighbor.MyRule2: return true;
+			case Neighbor.DontCare:
+				return true;
+			case Neighbor.Walkable:
+				return (other is MyTile)
+					&& (other as MyTile).isWalkable;
 		}
+
 		return true;
 	}
 }
 ```
 
-- Expansion Rules
+#### Expansion Rules
 
 ```csharp
-public class MyTile : RuleTile<MyTile.Neighbor> {
+public class MyTile3 : RuleTile<MyTile3.Neighbor> {
+
+	public bool isWalkable;
+
 	public class Neighbor : RuleTile.TilingRule.Neighbor {
-		// 0, 1, 2 is using in RuleTile.TilingRule.Neighbor
-		public const int MyRule1 = 3;
-		public const int MyRule2 = 4;
+		public const int Walkable = 3; // 0, 1, 2 in 'RuleTile.TilingRule.Neighbor'
 	}
-	public override bool RuleMatch(int neighbor, TileBase tile) {
+
+	public override bool RuleMatch(int neighbor, TileBase other) {
+        if (other is RuleOverrideTile)
+            other = (other as RuleOverrideTile).m_InstanceTile;
+
 		switch (neighbor) {
-			case Neighbor.MyRule1: return false;
-			case Neighbor.MyRule2: return true;
+			case Neighbor.Walkable:
+				return (other is MyTile)
+					&& (other as MyTile).isWalkable;
 		}
-		return base.RuleMatch(neighbor, tile);
+
+		return base.RuleMatch(neighbor, other);
 	}
 }
 ```
 
-- Siblings Tile 1
+#### Siblings Tile by whitelist (Bad performance)
 
 ```csharp
-public class MyTile : RuleTile<MyTile.Neighbor> {
+public class MyTile4 : RuleTile<MyTile4.Neighbor> {
+
 	public List<TileBase> sibings = new List<TileBase>();
-	public class Neighbor : RuleTile.TilingRule.Neighbor {
-		public const int Sibing = 3;
-	}
-	public override bool RuleMatch(int neighbor, TileBase tile) {
+
+	public override bool RuleMatch(int neighbor, TileBase other) {
+        if (other is RuleOverrideTile)
+            other = (other as RuleOverrideTile).m_InstanceTile;
+
 		switch (neighbor) {
-			case Neighbor.Sibing: return sibings.Contains(tile);
+			case RuleTile.TilingRule.Neighbor.This:
+				return sibings.Contains(other);
 		}
-		return base.RuleMatch(neighbor, tile);
+
+		return base.RuleMatch(neighbor, other);
 	}
 }
 ```
 
-- Siblings Tile 2
+#### Siblings Tile by enum (Good performance)
 
 ```csharp
-public class MyTile : RuleTile<MyTile.Neighbor> {
-	public int siblingGroup;
-	public class Neighbor : RuleTile.TilingRule.Neighbor {
-		public const int Sibing = 3;
-	}
-	public override bool RuleMatch(int neighbor, TileBase tile) {
-		MyTile myTile = tile as MyTile;
+public class MyTile5 : RuleTile<MyTile5.Neighbor> {
+
+    public enum SibingGroup
+    {
+		None,
+        Poles,
+        Terrain,
+		/* ... */
+    }
+    public SibingGroup sibingGroup;
+
+	public override bool RuleMatch(int neighbor, TileBase other) {
+        if (other is RuleOverrideTile)
+            other = (other as RuleOverrideTile).m_InstanceTile;
+
 		switch (neighbor) {
-			case Neighbor.Sibing: return myTile && myTile.siblingGroup == siblingGroup;
+			case RuleTile.TilingRule.Neighbor.This:
+				return (other is MyTile)
+					&& (other as MyTile).siblingGroup != SibingGroup.None;
+					&& (other as MyTile).siblingGroup == this.siblingGroup;
 		}
-		return base.RuleMatch(neighbor, tile);
+
+		return base.RuleMatch(neighbor, other);
+	}
+}
+```
+
+### Custom neighbor rules GUI
+
+```csharp
+[CustomEditor(typeof(MyTile3))]
+public class MyTile3Editor : RuleTileEditor {
+
+	public override void RuleOnGUI(Rect rect, int arrowIndex, int neighbor)
+	{
+		switch (neighbor)
+		{
+			case MyTile3.Neighbor.Walkable:
+				GUI.DrawTexture(rect, /* ... */);
+				break;
+		}
+
+		base.RuleOnGUI(rect, arrowIndex, neighbor);
 	}
 }
 ```
